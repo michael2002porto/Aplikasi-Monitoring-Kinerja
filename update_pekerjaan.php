@@ -230,7 +230,7 @@
                         </div>
                         <input type="hidden" name="id" value="<?= $id ?>">
                         <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="pekerjaan2.php" class="btn btn-default">Cancel</a>
+                        <a href="pekerjaan.php" class="btn btn-default">Cancel</a>
                     </form>
                 </div>
             </div>

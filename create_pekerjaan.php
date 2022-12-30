@@ -77,7 +77,7 @@
                 // Attempt to execute the prepared statement
                 if (mysqli_stmt_execute($stmt)) {
                     // Records created successfully. Redirect to landing page
-                    header("location: pekerjaan2.php");
+                    header("location: pekerjaan.php");
                     exit();
                 } else {
                     echo "Something went wrong. Please try again later.";
