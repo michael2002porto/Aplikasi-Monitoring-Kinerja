@@ -1,42 +1,56 @@
 <?php
-// Process delete operation after confirmation
-if (isset($_POST["id"]) && !empty($_POST["id"])) {
-    // Include config file
-    require_once "config.php";
+    //inisialisasi session
+    session_start();
+    //menyertakan file program functions.php pada register
+    require('functions.php');
+    //mengecek username pada session
+    if (!isset($_SESSION['username'])) {
+        $_SESSION['msg'] = 'Anda harus login untuk mengakses halaman ini';
+        alert($_SESSION['msg']);
+        // header('Location: login.php');
+        echo '<script type="text/javascript">';
+        echo 'window.location.href = "login.php";';
+        echo '</script>';
+    }
 
-    // Prepare a delete statement
-    $sql = "DELETE FROM jabatan WHERE idJabatan = ?";
+    // Process delete operation after confirmation
+    if (isset($_POST["id"]) && !empty($_POST["id"])) {
+        // Include config file
+        require_once "config.php";
 
-    if ($stmt = mysqli_prepare($link, $sql)) {
-        // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "i", $param_id);
+        // Prepare a delete statement
+        $sql = "DELETE FROM jabatan WHERE idJabatan = ?";
 
-        // Set parameters
-        $param_id = trim($_POST["id"]);
+        if ($stmt = mysqli_prepare($link, $sql)) {
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "i", $param_id);
 
-        // Attempt to execute the prepared statement
-        if (mysqli_stmt_execute($stmt)) {
-            // Records created successfully. Redirect to landing page
-            header("location: jabatan.php");
+            // Set parameters
+            $param_id = trim($_POST["id"]);
+
+            // Attempt to execute the prepared statement
+            if (mysqli_stmt_execute($stmt)) {
+                // Records created successfully. Redirect to landing page
+                header("location: jabatan.php");
+                exit();
+            } else {
+                echo "Something went wrong. Please try again later.";
+            }
+        }
+
+        // Close statement
+        mysqli_stmt_close($stmt);
+
+        // Close connection
+        mysqli_close($link);
+    } else {
+        // Check existence of id parameter
+        if (empty(trim($_GET["id"]))) {
+            // URL doesn't contain id parameter. Redirect to error page
+            header("loaction: error.php");
             exit();
-        } else {
-            echo "Something went wrong. Please try again later.";
         }
     }
-
-    // Close statement
-    mysqli_stmt_close($stmt);
-
-    // Close connection
-    mysqli_close($link);
-} else {
-    // Check existence of id parameter
-    if (empty(trim($_GET["id"]))) {
-        // URL doesn't contain id parameter. Redirect to error page
-        header("loaction: error.php");
-        exit();
-    }
-}
 ?>
 
 <!DOCTYPE html>

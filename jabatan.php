@@ -1,3 +1,19 @@
+<?php
+    //inisialisasi session
+    session_start();
+    //menyertakan file program functions.php pada register
+    require('functions.php');
+    //mengecek username pada session
+    if (!isset($_SESSION['username'])) {
+        $_SESSION['msg'] = 'Anda harus login untuk mengakses halaman ini';
+        alert($_SESSION['msg']);
+        // header('Location: login.php');
+        echo '<script type="text/javascript">';
+        echo 'window.location.href = "login.php";';
+        echo '</script>';
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
