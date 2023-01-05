@@ -1,6 +1,3 @@
-<!-- Nama : Michael Natanael -->
-<!-- NIM  : 2107411002 -->
-
 <?php
 
 define('DB_SERVER', 'localhost');

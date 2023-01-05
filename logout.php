@@ -1,6 +1,3 @@
-<!-- Nama : Michael Natanael -->
-<!-- NIM  : 2107411002 -->
-
 <?php
 session_start(); //inisialisasi session
 if (session_destroy()) { //menghapus session

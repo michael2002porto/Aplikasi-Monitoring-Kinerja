@@ -1,6 +1,3 @@
-<!-- Nama : Michael Natanael -->
-<!-- NIM  : 2107411002 -->
-
 <?php
 //menyertakan file program config.php pada register
 require('config.php');
