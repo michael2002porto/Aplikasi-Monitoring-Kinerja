@@ -96,8 +96,8 @@ $result_nilai_akhir[4] = mysqli_fetch_array(mysqli_query($link, $sql))[0];
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
-    <script type="text/javascript" src="chart.js"></script>
-    <script type="text/javascript" src="chart-utils.min.js"></script>
+    <script type="text/javascript" src="js/chart.js"></script>
+    <script type="text/javascript" src="js/chart-utils.min.js"></script>
     <style type="text/css">
         .nav {
             padding: 10px;
