@@ -72,12 +72,29 @@ if (!isset($_SESSION['username'])) {
                             <!-- Approach -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Hello, <?=  ?></h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Hello, <?= $_SESSION['name'] ?></h6>
                                 </div>
                                 <div class="card-body">
-                                    <p>Name: </p>
-                                    <p>Username: </p>
-                                    <p>Email: </p>
+                                    <form class="user">
+                                        <div class="form-group row">
+                                            <label for="exampleUsername" class="col-sm-2 col-form-label">Username</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-user" id="exampleUsername" placeholder="Username" readonly value="<?= $_SESSION['username'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleName" class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-user" id="exampleName" placeholder="Name" readonly value="<?= $_SESSION['name'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleEmail" class="col-sm-2 col-form-label">Email</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-user" id="exampleEmail" placeholder="Email" readonly value="<?= $_SESSION['email'] ?>">
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 

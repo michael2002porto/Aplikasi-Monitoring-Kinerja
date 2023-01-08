@@ -28,9 +28,12 @@ if (isset($_POST['submit'])) {
             $result = mysqli_query($link, $query);
             $rows = mysqli_num_rows($result);
             if ($rows != 0) {
-                $hash = mysqli_fetch_assoc($result)['password'];
+                $fetch_result = mysqli_fetch_assoc($result);
+                $hash = $fetch_result['password'];
                 if (password_verify($password, $hash)) {
                     $_SESSION['username'] = $username;
+                    $_SESSION['name'] = $fetch_result['name'];
+                    $_SESSION['email'] = $fetch_result['email'];
                     header('Location: index.php');
                 }
                 //jika gagal maka akan menampilkan pesan error
