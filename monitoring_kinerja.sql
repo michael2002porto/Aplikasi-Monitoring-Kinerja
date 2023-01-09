@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Dec 30, 2022 at 04:35 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Host: 127.0.0.1
+-- Generation Time: Jan 09, 2023 at 11:07 AM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -109,6 +109,30 @@ INSERT INTO `pekerjaan` (`idPekerjaan`, `uraian_pekerjaan`, `id_pegawai`, `waktu
 (1, 'Membuat laporan harian', 1, '2022-12-29 10:32:24', '2022-12-30 10:32:24', 'Selesai'),
 (2, 'Membuat desain', 1, '2022-12-30 10:32:24', '2022-12-31 10:32:24', 'Pending');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `name` varchar(70) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `username`, `email`, `password`) VALUES
+(4, 'Michael Natanael', 'natanaelmichael', 'michael.natanael.tik21@mhsw.pnj.ac.id', '$2y$10$r/jCxr7EcU.P7.pVjh.FjurVOH/0qIkhy.RBdV8qnrosqwAessOd2'),
+(5, 'Angel', 'angel', 'angel@gmail.com', '$2y$10$tvZlYMmywrUdqxEMtan7dezKTqv0pfTayBSGgjm.QBW8lUtX24qyG'),
+(6, 'Lukas', 'lukas', 'lukas@gmail.com', '$2y$10$wsbvnOEMGbZ7QJx1rv9WleLwr2PdX1boJiJnhtWnecQTCQTj8e2r6'),
+(7, 'Jack', 'jack', 'jack@gmail.com', '$2y$10$Xt7UyeuE1e4zUP9VhOfd6ewsyPL5sKbQMPjXtzh/KitVal8kzFNVa');
+
 --
 -- Indexes for dumped tables
 --
@@ -142,6 +166,12 @@ ALTER TABLE `pekerjaan`
   ADD KEY `kegiatan_ibfk_1` (`id_pegawai`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -168,6 +198,12 @@ ALTER TABLE `pegawai`
 --
 ALTER TABLE `pekerjaan`
   MODIFY `idPekerjaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
