@@ -17,8 +17,8 @@
     require_once "config.php";
 
     // Tentukan variabel dan inisialisasi dengan nilai kosong
-    $bidang = "";
-    $bidang_err = "";
+    $jabatan = "";
+    $jabatan_err = "";
 
     // Processing form data when form is submitted
     if (isset($_POST["id"]) && !empty($_POST["id"])) {
@@ -26,29 +26,29 @@
         $id = $_POST["id"];
 
         // Validate uraian kegiatan
-        $input_bidang = trim($_POST["nama_bidang"]);
-        if (empty($input_bidang)) {
-            $bidang_err = "Please enter a name";
+        $input_jabatan = trim($_POST["nama_jabatan"]);
+        if (empty($input_jabatan)) {
+            $jabatan_err = "Please enter a name";
         } else {
-            $bidang = $input_bidang;
+            $jabatan = $input_jabatan;
         }
         
         // Check input errors before updating in database
-        if (empty($bidang_err)) {
+        if (empty($jabatan_err)) {
             // Prepare an update statement
-            $sql = "UPDATE bidang SET nama_bidang=? WHERE idBidang=?";
+            $sql = "UPDATE jabatan SET nama_jabatan=? WHERE idJabatan=?";
             if ($stmt = mysqli_prepare($link, $sql)) {
                 // Bind variables to the prepared statement as parameters
-                mysqli_stmt_bind_param($stmt, "si", $param_bidang, $param_idBidang);
+                mysqli_stmt_bind_param($stmt, "si", $param_jabatan, $param_idJabatan);
 
                 // Set parameters
-                $param_bidang = $bidang;
-                $param_idBidang = $id;
+                $param_jabatan = $jabatan;
+                $param_idJabatan = $id;
 
                 // Attempt to execute the prepared statement
                 if (mysqli_stmt_execute($stmt)) {
                     // Records created successfully. Redirect to landing page
-                    header("location: bidang.php");
+                    header("location: jabatan.php");
                     exit();
                 } else {
                     echo "Something went wrong. Please try again later.";
@@ -68,7 +68,7 @@
             $id = trim($_GET["id"]);
 
             // Prepare a aselect statement
-            $sql = "SELECT * FROM bidang WHERE idBidang = ?";
+            $sql = "SELECT * FROM jabatan WHERE idJabatan = ?";
             if ($stmt = mysqli_prepare($link, $sql)) {
                 // Bind variables to the prepared statement as parameters
                 mysqli_stmt_bind_param($stmt, "i", $param_id);
@@ -86,8 +86,8 @@
                         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
                         // Retrieve individual field value
-                        $id = $row["idBidang"];
-                        $bidang = $row["nama_bidang"];
+                        $id = $row["idJabatan"];
+                        $jabatan = $row["nama_jabatan"];
                     } else {
                         // URL doesn't contain valid id parameter. Redirect to error page
                         header("location: error.php");
@@ -113,48 +113,46 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Record</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
-        .wrapper {
-            width: 500px;
-            margin: 0 auto;
-        }
-    </style>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Record</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+        <style type="text/css">
+            .wrapper {
+                width: 500px;
+                margin: 0 auto;
+            }
+        </style>
 </head>
 
-<body>
-    <div class="wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="page-header">
-                        <h2>Update Bidang</h2>
+    <body>
+        <div class="wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-header">
+                            <h2>Update Jabatan</h2>
+                        </div>
+                        <p>Silahkan edit form di bawah ini kemudian submit untuk mengubah data jabatan di database.</p>
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="idJabatan">ID Jabatan</label>
+                                <input type="number" id="idJabatan" class="form-control" value="<?= $id ?>" disabled>
+                            </div>
+                            <div class="form-group <?php echo (!empty($jabatan_err)) ? 'has-error' : ''; ?>">
+                                <label for="nama_jabatan">Jabatan</label>
+                                <input type="text" id="nama_jabatan" name="nama_jabatan" class="form-control" value="<?= $jabatan ?>">
+                                <span class="help-block"><?= $jabatan_err ?></span>
+                            </div>
+                            <input type="hidden" name="id" value="<?= $id ?>">
+                            <input type="submit" class="btn btn-primary" value="Submit">
+                            <a href="jabatan.php" class="btn btn-default">Cancel</a>
+                        </form>
                     </div>
-                    <p>Silahkan edit form di bawah ini kemudian submit untuk mengubah data bidang di database.</p>
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="idBidang">ID Bidang</label>
-                            <input type="number" id="idBidang" class="form-control" value="<?= $id ?>" disabled>
-                        </div>
-                        <div class="form-group <?php echo (!empty($bidang_err)) ? 'has-error' : ''; ?>">
-                            <label for="nama_bidang">Bidang</label>
-                            <input type="text" id="nama_bidang" name="nama_bidang" class="form-control" value="<?= $bidang ?>">
-                            <span class="help-block"><?= $bidang_err ?></span>
-                        </div>
-                        <input type="submit" class="btn btn-primary" value="Submit">
-                        <input type="hidden" name="id" value="<?= $id ?>">
-                        <a href="bidang.php" class="btn btn-default">Cancel</a>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>
-</body>
-
+    </body>
 </html>

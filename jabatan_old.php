@@ -25,7 +25,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
 
-        <title>Manajemen Data | Bidang</title>
+        <title>Manajemen Data | Jabatan</title>
         <style type="text/css">
             .nav {
                 padding: 10px;
@@ -61,9 +61,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="page-header clearfix">
-                            <h2 class="pull-left">Manajemen Data/Bidang</h2>
+                            <h2 class="pull-left">Manajemen Data/Jabatan</h2>
                             &nbsp;
-                            <a href="create_bidang.php" class="btn btn-success pull-right">Tambah Data Bidang</a>
+                            <a href="create_jabatan.php" class="btn btn-success pull-right">Tambah Data Jabatan</a>
                         </div>
                         <form class="form-inline pull-right" method="get">
                             <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
@@ -86,9 +86,9 @@
 
                             if (isset($_GET['search'])) {
                                 $search = $_GET['search'];
-                                $sql = "SELECT * FROM bidang WHERE nama_bidang LIKE '%$search%' ORDER BY idBidang ASC LIMIT $posisi, $batas";
+                                $sql = "SELECT * FROM jabatan WHERE nama_jabatan LIKE '%$search%' ORDER BY idJabatan ASC LIMIT $posisi, $batas";
                             } else {
-                                $sql = "SELECT * FROM bidang ORDER BY idBidang ASC LIMIT $posisi, $batas";
+                                $sql = "SELECT * FROM jabatan ORDER BY idJabatan ASC LIMIT $posisi, $batas";
                             }
 
                             if ($result = mysqli_query($link, $sql)) {
@@ -98,7 +98,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Bidang</th>
+                                    <th>Nama Jabatan</th>
                                     <th>Pengaturan</th>
                                 </tr>
                             </thead>
@@ -110,12 +110,12 @@
 
                                 <tr>
                                     <td><?= $i ?></td>
-                                    <td><?= $row['nama_bidang'] ?></td>
+                                    <td><?= $row['nama_jabatan'] ?></td>
                                     <td>
                                         <?php 
-                                            echo "<a href='update_bidang.php?id=" . $row['idBidang'] ."' title='Update record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'>
+                                            echo "<a href='update_jabatan.php?id=" . $row['idJabatan'] ."' title='Update record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'>
                                             </span></a>";
-                                            echo "<a href='delete_bidang.php?id=" . $row['idBidang'] ."' title='Delete record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'>
+                                            echo "<a href='delete_jabatan.php?id=" . $row['idJabatan'] ."' title='Delete record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'>
                                             </span></a>";
                                         ?>
                                     </td>
@@ -133,9 +133,9 @@
                                 <?php
                                     if (isset($_GET['search'])) {
                                         $search = $_GET['search'];
-                                        $query2 = "SELECT * FROM bidang WHERE nama_bidang LIKE '%$search%' ORDER BY idBidang ASC";
+                                        $query2 = "SELECT * FROM jabatan WHERE nama_jabatan LIKE '%$search%' ORDER BY idJabatan ASC";
                                     } else {
-                                        $query2 = "SELECT * FROM bidang ORDER BY nama_bidang ASC";
+                                        $query2 = "SELECT * FROM jabatan ORDER BY nama_jabatan ASC";
                                     }
 
                                     $result2 = mysqli_query($link, $query2);
@@ -146,9 +146,9 @@
                                          if ($i != $halaman) {
                                             if (isset($_GET['search'])) {
                                                 $search = $_GET['search'];
-                                                echo "<li class='page-item'><a class='page-link' href='bidang.php?halaman=$i&search=$search'>$i</a></li>";
+                                                echo "<li class='page-item'><a class='page-link' href='jabatan.php?halaman=$i&search=$search'>$i</a></li>";
                                             } else {
-                                                echo "<li class='page-item'><a class='page-link' href='bidang.php?halaman=$i'>$i</a></li>";
+                                                echo "<li class='page-item'><a class='page-link' href='jabatan.php?halaman=$i'>$i</a></li>";
                                             }
                                         } else {
                                             echo "<li class='page-item active'><a class='page-link' href='#'>$i</a></li>";

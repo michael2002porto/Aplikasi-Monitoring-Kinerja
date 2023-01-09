@@ -17,166 +17,189 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
+        <title>Monitoring Kinerja - Jabatan - Daftar Jabatan</title>
 
-        <title>Manajemen Data | Jabatan</title>
-        <style type="text/css">
-            .nav {
-                padding: 10px;
-                margin: 0 auto;
-            }
+        <!-- Custom fonts for this template-->
+        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-            .wrapper {
-                width: 1200px;
-                margin: 0 auto;
-            }
+        <!-- Custom styles for this template-->
+        <link href="css/sb-admin-2.min.css" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-            .page-header h2 {
-                margin-top: 0;
-            }
-
-            table tr td:last-child a {
-                margin-right: 10px;
-            }
-        </style>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('[data-toggle="tooltip"]').tooltip();
-            })
-        </script>
     </head>
 
-    <body>
-        <nav class="nav">
-            <a href="logout.php" class="btn btn-danger pull-right">Logout</a>
-        </nav>
-        <div class="wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="page-header clearfix">
-                            <h2 class="pull-left">Manajemen Data/Jabatan</h2>
-                            &nbsp;
-                            <a href="create_jabatan.php" class="btn btn-success pull-right">Tambah Data Jabatan</a>
+    <body id="page-top">
+
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+
+            <?php
+                $active_sidebar = 'dashboard';
+                include "template/sidebar_v.php";
+            ?>
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <!-- Main Content -->
+                <div id="content">
+
+                    <?php
+                        include "template/topbar_v2.php";
+                    ?>
+
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
+
+                        <!-- Page Heading -->
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-800">Jabatan</h1>
                         </div>
-                        <form class="form-inline pull-right" method="get">
-                            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                        </form>
-                        <br><br><br>
-                        <?php
-                            // Include config file
-                            require_once "config.php";
 
-                            // Attempt select query execution
-                            $batas = 5;
-                            $halaman = @$_GET['halaman'];
-                            if (empty($halaman)) {
-                                $posisi = 0;
-                                $halaman = 1;
-                            } else {
-                                $posisi = ($halaman - 1) * $batas;
-                            }
+                        <div class="wrapper">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form class="form-inline pull-right" method="get">
+                                            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                        </form>
+                                        <br><br><br>
+                                        <?php
+                                            // Include config file
+                                            require_once "config.php";
 
-                            if (isset($_GET['search'])) {
-                                $search = $_GET['search'];
-                                $sql = "SELECT * FROM jabatan WHERE nama_jabatan LIKE '%$search%' ORDER BY idJabatan ASC LIMIT $posisi, $batas";
-                            } else {
-                                $sql = "SELECT * FROM jabatan ORDER BY idJabatan ASC LIMIT $posisi, $batas";
-                            }
+                                            // Attempt select query execution
+                                            $batas = 5;
+                                            $halaman = @$_GET['halaman'];
+                                            if (empty($halaman)) {
+                                                $posisi = 0;
+                                                $halaman = 1;
+                                            } else {
+                                                $posisi = ($halaman - 1) * $batas;
+                                            }
 
-                            if ($result = mysqli_query($link, $sql)) {
-                                if (mysqli_num_rows($result) > 0) {
-                        ?>
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Jabatan</th>
-                                    <th>Pengaturan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                    $i = 1 + $posisi;
-                                    while ($row = mysqli_fetch_array($result)) {
-                                ?>
-
-                                <tr>
-                                    <td><?= $i ?></td>
-                                    <td><?= $row['nama_jabatan'] ?></td>
-                                    <td>
-                                        <?php 
-                                            echo "<a href='update_jabatan.php?id=" . $row['idJabatan'] ."' title='Update record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'>
-                                            </span></a>";
-                                            echo "<a href='delete_jabatan.php?id=" . $row['idJabatan'] ."' title='Delete record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'>
-                                            </span></a>";
-                                        ?>
-                                    </td>
-                                </tr>
-                                
-                                <?php
-                                         $i++;
-                                    }
-                                ?>
-                                </tbody>
-                            </table>
-
-                            <!-- Pagination -->
-                            <ul class="pagination">
-                                <?php
-                                    if (isset($_GET['search'])) {
-                                        $search = $_GET['search'];
-                                        $query2 = "SELECT * FROM jabatan WHERE nama_jabatan LIKE '%$search%' ORDER BY idJabatan ASC";
-                                    } else {
-                                        $query2 = "SELECT * FROM jabatan ORDER BY nama_jabatan ASC";
-                                    }
-
-                                    $result2 = mysqli_query($link, $query2);
-                                    $jmldata = mysqli_num_rows($result2);
-                                    $jmlhalaman = ceil($jmldata / $batas);
-
-                                    for ($i = 1; $i <= $jmlhalaman; $i++) {
-                                         if ($i != $halaman) {
                                             if (isset($_GET['search'])) {
                                                 $search = $_GET['search'];
-                                                echo "<li class='page-item'><a class='page-link' href='jabatan.php?halaman=$i&search=$search'>$i</a></li>";
+                                                $sql = "SELECT * FROM jabatan WHERE nama_jabatan LIKE '%$search%' ORDER BY idJabatan ASC LIMIT $posisi, $batas";
                                             } else {
-                                                echo "<li class='page-item'><a class='page-link' href='jabatan.php?halaman=$i'>$i</a></li>";
+                                                $sql = "SELECT * FROM jabatan ORDER BY idJabatan ASC LIMIT $posisi, $batas";
                                             }
-                                        } else {
-                                            echo "<li class='page-item active'><a class='page-link' href='#'>$i</a></li>";
-                                        }
-                                    } 
-                                ?>
-                            </ul>
 
-                            <?php
-                                // Free result set
-                                mysqli_free_result($result);
-                                } else {
-                            ?>
-                            
-                            <p class="lead"><em>No records were found</em></p>
-                            
-                            <?php
-                                }
-                            } else {
-                                echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-                            }
+                                            if ($result = mysqli_query($link, $sql)) {
+                                                if (mysqli_num_rows($result) > 0) {
+                                        ?>
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Jabatan</th>
+                                                    <th>Pengaturan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                    $i = 1 + $posisi;
+                                                    while ($row = mysqli_fetch_array($result)) {
+                                                ?>
 
-                            // CLose connection
-                            mysqli_close($link);
-                        ?>
+                                                <tr>
+                                                    <td><?= $i ?></td>
+                                                    <td><?= $row['nama_jabatan'] ?></td>
+                                                    <td>
+                                                        <?php 
+                                                            echo "<a href='update_jabatan.php?id=" . $row['idJabatan'] ."' title='Update record' data-toggle='tooltip'><span class='fas fa-pen'>
+                                                            </span></a>";
+                                                            echo "<a href='delete_jabatan.php?id=" . $row['idJabatan'] ."' title='Delete record' data-toggle='tooltip'><span class='fas fa-trash'>
+                                                            </span></a>";
+                                                        ?>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <?php
+                                                        $i++;
+                                                    }
+                                                ?>
+                                                </tbody>
+                                            </table>
+
+                                            <!-- Pagination -->
+                                            <ul class="pagination">
+                                                <?php
+                                                    if (isset($_GET['search'])) {
+                                                        $search = $_GET['search'];
+                                                        $query2 = "SELECT * FROM jabatan WHERE nama_jabatan LIKE '%$search%' ORDER BY idJabatan ASC";
+                                                    } else {
+                                                        $query2 = "SELECT * FROM jabatan ORDER BY nama_jabatan ASC";
+                                                    }
+
+                                                    $result2 = mysqli_query($link, $query2);
+                                                    $jmldata = mysqli_num_rows($result2);
+                                                    $jmlhalaman = ceil($jmldata / $batas);
+
+                                                    for ($i = 1; $i <= $jmlhalaman; $i++) {
+                                                        if ($i != $halaman) {
+                                                            if (isset($_GET['search'])) {
+                                                                $search = $_GET['search'];
+                                                                echo "<li class='page-item'><a class='page-link' href='jabatan.php?halaman=$i&search=$search'>$i</a></li>";
+                                                            } else {
+                                                                echo "<li class='page-item'><a class='page-link' href='jabatan.php?halaman=$i'>$i</a></li>";
+                                                            }
+                                                        } else {
+                                                            echo "<li class='page-item active'><a class='page-link' href='#'>$i</a></li>";
+                                                        }
+                                                    } 
+                                                ?>
+                                            </ul>
+
+                                            <?php
+                                                // Free result set
+                                                mysqli_free_result($result);
+                                                } else {
+                                            ?>
+                                            
+                                            <p class="lead"><em>No records were found</em></p>
+                                            
+                                            <?php
+                                                }
+                                            } else {
+                                                echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+                                            }
+
+                                            // CLose connection
+                                            mysqli_close($link);
+                                        ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    </div>
+                    <!-- /.container-fluid -->
+
                 </div>
+                <!-- End of Main Content -->
+
+            <?php
+                include "template/footer_v.php";
+            ?>
+
             </div>
+            <!-- End of Content Wrapper -->
+
         </div>
+        <!-- End of Page Wrapper -->
+
+        <?php
+            include "template/tools_v.php";
+        ?>
+
     </body>
 </html>
