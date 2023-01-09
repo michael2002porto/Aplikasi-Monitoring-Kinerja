@@ -5,7 +5,8 @@ require('config.php');
 session_start();
 $error = '';
 $validate = '';
-if (isset($_SESSION['user'])) header('Location: index.php'); //mengecek apakah data username yang diinpukan user kosong atau tidak
+if (isset($_SESSION['username'])) header('Location: index.php');
+//mengecek apakah data username yang diinpukan user kosong atau tidak
 if (isset($_POST['submit'])) {
     // menghilangkan backshlases
     $username = stripslashes($_POST['username']); //cara sederhana mengamankan dari sql injection
@@ -33,10 +34,10 @@ if (isset($_POST['submit'])) {
                     //hashing password sebelum disimpan didatabase
                     $pass = password_hash($password, PASSWORD_DEFAULT); //insert data ke database
                     $query = "INSERT INTO users (username, name, email, password) VALUES ('$username', '$name','$email', '$pass')";
-                    $result = mysqli_query($link, $query); //jika insert data berhasil maka akan diredirect ke halaman index.php serta menyimpan data username ke session
+                    $result = mysqli_query($link, $query); //jika insert data berhasil maka akan diredirect ke halaman login.php serta menyimpan data username ke session
                     if ($result) {
-                        $_SESSION['username'] = $username;
-                        header('Location: index.php');
+                        // $_SESSION['username'] = $username;
+                        header('Location: login.php');
                         //jika gagal maka akan menampilkan pesan error
                     } else {
                         $error = 'Register User Gagal !!';
