@@ -1,6 +1,8 @@
 <?php
 //inisialisasi session
 session_start();
+//menyertakan file program config.php pada register
+require('config.php');
 //menyertakan file program functions.php pada register
 require('functions.php');
 //mengecek username pada session
@@ -11,6 +13,38 @@ if (!isset($_SESSION['username'])) {
     echo '<script type="text/javascript">';
     echo 'window.location.href = "login.php";';
     echo '</script>';
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+
+    if (cek_nama($username, $link) == 0 || $username == $_SESSION['username']) {
+        //hashing password sebelum disimpan didatabase
+        $query = "UPDATE users SET username = '$username', name = '$name', email = '$email' WHERE username = '" . $_SESSION['username'] . "'";
+        $result = mysqli_query($link, $query); //jika update data berhasil maka akan menyimpan data username ke session
+        if ($result) {
+            $_SESSION['username'] = $username;
+            $_SESSION['name'] = $_POST['name'];
+            $_SESSION['email'] = $_POST['email'];
+            // header('Location: login.php');
+            $msg = 'Update User Profile Berhasil !!';
+            //jika gagal maka akan menampilkan pesan error
+        } else {
+            $error = 'Update User Profile Gagal !!';
+        }
+    } else {
+        $error = 'Username sudah terdaftar !!';
+    }
+}
+
+//fungsi untuk mengecek username apakah sudah terdaftar atau belum
+function cek_nama($username, $link)
+{
+    $nama = mysqli_real_escape_string($link, $username);
+    $query = "SELECT * FROM users WHERE username = '$nama'";
+    if ($result = mysqli_query($link, $query)) return mysqli_num_rows($result);
 }
 ?>
 
@@ -61,13 +95,19 @@ if (!isset($_SESSION['username'])) {
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Profile</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        <a href="#" onclick="enableInput()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-user-edit fa-sm text-white-50"></i> Edit User Profile</a>
                     </div>
 
                     <!-- Content Row -->
                     <div class="row">
 
                         <div class="col-lg-12 mb-4">
+                            <?php if (!empty($error)) { ?>
+                                <div class="alert alert-danger" role="alert"><?= $error; ?></div>
+                            <?php } ?>
+                            <?php if (!empty($msg)) { ?>
+                                <div class="alert alert-success" role="alert"><?= $msg; ?></div>
+                            <?php } ?>
 
                             <!-- Approach -->
                             <div class="card shadow mb-4">
@@ -75,25 +115,28 @@ if (!isset($_SESSION['username'])) {
                                     <h6 class="m-0 font-weight-bold text-primary">Hello, <?= $_SESSION['name'] ?></h6>
                                 </div>
                                 <div class="card-body">
-                                    <form class="user">
+                                    <form class="user" action="profile.php" method="post">
                                         <div class="form-group row">
                                             <label for="exampleUsername" class="col-sm-2 col-form-label">Username</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control form-control-user" id="exampleUsername" placeholder="Username" readonly value="<?= $_SESSION['username'] ?>">
+                                                <input type="text" class="form-control form-control-user" name="username" id="exampleUsername" placeholder="Username" readonly value="<?= $_SESSION['username'] ?>">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="exampleName" class="col-sm-2 col-form-label">Name</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control form-control-user" id="exampleName" placeholder="Name" readonly value="<?= $_SESSION['name'] ?>">
+                                                <input type="text" class="form-control form-control-user" name="name" id="exampleName" placeholder="Name" readonly value="<?= $_SESSION['name'] ?>">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="exampleEmail" class="col-sm-2 col-form-label">Email</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control form-control-user" id="exampleEmail" placeholder="Email" readonly value="<?= $_SESSION['email'] ?>">
+                                                <input type="email" class="form-control form-control-user" name="email" id="exampleEmail" placeholder="Email" readonly value="<?= $_SESSION['email'] ?>">
                                             </div>
                                         </div>
+                                        <button type="submit" id="submit" class="btn btn-primary btn-user btn-block" disabled>
+                                            Update Profile
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -124,3 +167,13 @@ if (!isset($_SESSION['username'])) {
 </body>
 
 </html>
+
+<script>
+    function enableInput() {
+        var inputs = document.getElementsByClassName('form-control-user');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].readOnly = false;
+        }
+        document.getElementById('submit').disabled = false;
+    }
+</script>
