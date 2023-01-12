@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 09, 2023 at 11:07 AM
+-- Generation Time: Jan 12, 2023 at 12:22 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `monitoring_kinerja`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `absensi`
+--
+
+CREATE TABLE `absensi` (
+  `id_absensi` int(11) NOT NULL,
+  `id_karyawan` int(11) NOT NULL,
+  `absen_masuk` datetime NOT NULL,
+  `absen_pulang` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `absensi`
+--
+
+INSERT INTO `absensi` (`id_absensi`, `id_karyawan`, `absen_masuk`, `absen_pulang`) VALUES
+(6, 1, '2023-01-12 16:48:53', '2023-01-12 16:49:11'),
+(7, 1, '2023-01-12 16:49:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -138,6 +159,13 @@ INSERT INTO `users` (`id`, `name`, `username`, `email`, `password`) VALUES
 --
 
 --
+-- Indexes for table `absensi`
+--
+ALTER TABLE `absensi`
+  ADD PRIMARY KEY (`id_absensi`),
+  ADD KEY `id_karyawan` (`id_karyawan`);
+
+--
 -- Indexes for table `bidang`
 --
 ALTER TABLE `bidang`
@@ -176,6 +204,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `absensi`
+--
+ALTER TABLE `absensi`
+  MODIFY `id_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `bidang`
 --
 ALTER TABLE `bidang`
@@ -208,6 +242,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `absensi`
+--
+ALTER TABLE `absensi`
+  ADD CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `pegawai` (`idPegawai`);
 
 --
 -- Constraints for table `pegawai`
