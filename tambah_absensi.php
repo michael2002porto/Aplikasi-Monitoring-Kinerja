@@ -16,49 +16,84 @@
     // Include config file
     require_once "config.php";
 
+    $sqlPegawai = "SELECT * FROM pegawai";
+	$all_pegawai = mysqli_query($link,$sqlPegawai);
+
     // Tentukan variabel dan inisialisasi dengan nilai kosong
-    $absensi = "";
-    $absensi_err = "";
+    $namaPegawai = $jamMasuk = $jamKeluar = $status = "";
+    $namaPegawai_err = $status_err = "";
 
     // Memproses data formulir saat formulir dikirimkan
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        
-        // Validate nama jabatan
-        $input_jabatan = trim($_POST["nama_jabatan"]);
-        if (empty($input_jabatan)) {
-            $jabatan_err = "Please enter a name";
+
+        // Mendapatkan jam sekarang
+        date_default_timezone_set('Asia/Jakarta');
+        $waktu = date('Y-m-d H:i:s');
+
+        // Validate id pegawai
+        $input_pegawai = trim($_POST["nama_pegawai"]);
+        if (empty($input_pegawai)) {
+            $pegawai_err = "Please enter the pegawai";
+        } elseif (!ctype_digit($input_pegawai)) {
+            $pegawai_err = "Please enter a positive integer value";
         } else {
-            $jabatan = $input_jabatan;
+            $pegawai = $input_pegawai;
         }
 
-        // Check input errors before inserting in database
-        if (empty($jabatan_err)) {
-            // Prepare an insert statement
-            $sql = "INSERT INTO jabatan (nama_jabatan) VALUES (?)";
-            if ($stmt = mysqli_prepare($link, $sql)) {
-                // Bind variables to the prepared statement as parameters
-                mysqli_stmt_bind_param($stmt, "s", $param_jabatan);
+        // Validate satuan
+        $input_status = trim($_POST["status_absen"]);
+        if (empty($input_status)) {
+            $status_err = "Please enter a name";
+        } else if (!($input_status != "Masuk" || $input_status != "Keluar")) {
+            $status_err = "Status absensi salah";
+        } else {
+            $status = $input_status;
+        }
 
-                // Set parameters
-                $param_jabatan = $jabatan;
+        if (!empty($status)) {
+            if ($status == "Masuk") {
+                if (empty($namaPegawai_err) && empty($status_err)) {
+                    $sql = "INSERT INTO absensi (id_karyawan, status, absen_masuk) VALUES (?, ?, ?)" ;
+                    if ($stmt = mysqli_prepare($link, $sql)) {
+                        mysqli_stmt_bind_param($stmt, "iss", $paramIdPegawai, $paramStatus, $paramAbsenMasuk);
 
-                // Attempt to execute the prepared statement
-                if (mysqli_stmt_execute($stmt)) {
-                    // Records created successfully. Redirect to landing page
-                    header("location: jabatan.php");
-                    exit();
-                } else {
-                    echo "Something went wrong. Please try again later.";
+                        $paramIdPegawai = $pegawai;
+                        $paramStatus = $status;
+                        $paramAbsenMasuk = $waktu;
+
+                        if (mysqli_stmt_execute($stmt)) { 
+                            header("location: absensi.php");
+                            exit();
+                        } else {
+                            echo "Something went wrong. Please try again later.";
+                        }
+                    }
+                    // Close statement
+                    mysqli_stmt_close($stmt);
+                }
+            } else if ($status == "Keluar") {
+                if (empty($namaPegawai_err) && empty($status_err)) {
+                    $sql = "UPDATE absensi SET absen_pulang = ? WHERE id_karyawan = ? AND absen_pulang IS NULL";
+                    if ($stmt = mysqli_prepare($link, $sql)) {
+                        mysqli_stmt_bind_param($stmt, "si", $paramAbsenPulang, $paramIdPegawai);
+
+                        $paramAbsenPulang = $waktu;
+                        $paramIdPegawai = $pegawai;
+
+                        if (mysqli_stmt_execute($stmt)) {
+                            header('location: absensi.php');
+                            exit();
+                        } else {
+                            echo "Something went wrong. Please try again later.";
+                        }
+                    }
+                    mysqli_stmt_close($stmt);
                 }
             }
-
-            // Close statement
-            mysqli_stmt_close($stmt);
         }
-
-        // Close connection
-        mysqli_close($link);
-    }
+    // Close connection
+    mysqli_close($link);
+}
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +105,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Monitoring Kinerja - Bidang - Absensi</title>
+        <title>Monitoring Kinerja - Absensi - Tambah Absensi</title>
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -107,7 +142,7 @@
 
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Absensi</h1>
+                            <h1 class="h3 mb-0 text-gray-800">Tambah Absensi</h1>
                         </div>
 
                         <div class="wrapper">
@@ -117,13 +152,35 @@
                                         <div class="card shadow mb-4">
                                             <div class="card-body">
                                                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                                                    <div class="form-group <?php echo (!empty($abesnsi_err)) ? 'has-error' : ''; ?>">
-                                                        <label for="nama_jabatan">Waktu</label>
-                                                        <input type="text" id="nama_jabatan" name="nama_jabatan" class="form-control" value="<?= $absensi ?>">
-                                                        <span class="help-block"><?= $absensi_err ?></span>
+                                                    <div class="form-group <?php echo (!empty($namaPegawai_err)) ? 'has-error' : ''; ?>">
+                                                        <label for="pegawai">Nama Pegawai</label><br>
+                                                            <select name="nama_pegawai">
+                                                                <option selected disabled>--- Pegawai ---</option>
+                                                                <?php
+                                                                    while ($namaPegawai = mysqli_fetch_array(
+                                                                        $all_pegawai,MYSQLI_ASSOC)){
+                                                                ?>
+                                                                <option value="<?php echo $namaPegawai["idPegawai"];?>">
+                                                                    <?php echo $namaPegawai["nama_peg"];?>
+                                                                </option>
+                                                                
+                                                                <?php
+                                                                    }
+                                                                ?>
+                                                            </select>
+                                                        <span class="help-block"><?= $namaPegawai_err ?></span>
+                                                    </div>
+                                                    <div class="form-group <?php echo (!empty($status_err)) ? 'has-error' : ''; ?>">
+                                                        <label for="status">Status</label><br>
+                                                        <select name="status_absen">
+                                                                <option selected disabled>--- Status ---</option>
+                                                                <option value="Masuk">Masuk</option>
+                                                                <option value="Keluar">Keluar</option>
+                                                            </select>
+                                                        <span class="help-block"><?= $status_err ?></span>
                                                     </div>
                                                     <input type="submit" class="btn btn-primary" value="Submit">
-                                                    <a href="jabatan.php" class="btn btn-default">Cancel</a>
+                                                    <a href="absensi.php" class="btn btn-default">Cancel</a>
                                                 </form>
                                             </div>
                                         </div>
