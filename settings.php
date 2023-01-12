@@ -16,26 +16,46 @@ if (!isset($_SESSION['username'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
+    // menghilangkan backshlases
+    $cur_password = stripslashes($_POST['cur_password']);
+    //cara sederhana mengamankan dari sql injection
+    $cur_password = mysqli_real_escape_string($link, $cur_password);
 
-    if (cek_nama($username, $link) == 0 || $username == $_SESSION['username']) {
-        //hashing password sebelum disimpan didatabase
-        $query = "UPDATE users SET username = '$username', name = '$name', email = '$email' WHERE username = '" . $_SESSION['username'] . "'";
-        $result = mysqli_query($link, $query); //jika update data berhasil maka akan menyimpan data username ke session
-        if ($result) {
-            $_SESSION['username'] = $username;
-            $_SESSION['name'] = $_POST['name'];
-            $_SESSION['email'] = $_POST['email'];
-            // header('Location: login.php');
-            $msg = 'Update User Profile Berhasil !!';
-            //jika gagal maka akan menampilkan pesan error
+    // menghilangkan backshlases
+    $new_password = stripslashes($_POST['new_password']);
+    //cara sederhana mengamankan dari sql injection
+    $new_password = mysqli_real_escape_string($link, $new_password);
+
+    // menghilangkan backshlases
+    $confirm_new_password = stripslashes($_POST['confirm_new_password']);
+    //cara sederhana mengamankan dari sql injection
+    $confirm_new_password = mysqli_real_escape_string($link, $confirm_new_password);
+
+    //select data berdasarkan username dari database
+    $query = "SELECT * FROM users WHERE username = '" . $_SESSION['username'] . "'";
+    $result = mysqli_query($link, $query);
+    $rows = mysqli_num_rows($result);
+    if ($rows != 0) {
+        $fetch_result = mysqli_fetch_assoc($result);
+        $hash = $fetch_result['password'];
+        if (password_verify($cur_password, $hash)) {
+            //mengecek apakah password yang diinputkan sama dengan re-password yang diinputkan kembali
+            if ($new_password == $confirm_new_password) {
+                //hashing password sebelum disimpan didatabase
+                $pass = password_hash($new_password, PASSWORD_DEFAULT);
+                $query = "UPDATE users SET password = '$pass' WHERE username = '" . $_SESSION['username'] . "'";
+                $result = mysqli_query($link, $query); //jika insert data berhasil maka akan diredirect ke halaman login.php serta menyimpan data username ke session
+                if ($result) {
+                    $msg = 'Update Password User Berhasil !!';
+                } else {
+                    $error = 'Update Password User Gagal !!';
+                }
+            } else {
+                $error = 'Konfirmasi Password tidak sama !!';
+            }
         } else {
-            $error = 'Update User Profile Gagal !!';
+            $error = 'Current Password salah !!';
         }
-    } else {
-        $error = 'Username sudah terdaftar !!';
     }
 }
 
@@ -94,8 +114,7 @@ function cek_nama($username, $link)
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Profile</h1>
-                        <a href="#" onclick="enableInput()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-user-edit fa-sm text-white-50"></i> Edit User Profile</a>
+                        <h1 class="h3 mb-0 text-gray-800">Settings</h1>
                     </div>
 
                     <!-- Content Row -->
@@ -112,30 +131,30 @@ function cek_nama($username, $link)
                             <!-- Approach -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Hello, <?= $_SESSION['name'] ?></h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Change Password</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form class="user" action="profile.php" method="post">
+                                    <form class="user" action="settings.php" method="post">
                                         <div class="form-group row">
-                                            <label for="exampleUsername" class="col-sm-2 col-form-label">Username</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control form-control-user" name="username" id="exampleUsername" placeholder="Username" readonly value="<?= $_SESSION['username'] ?>" required>
+                                            <label for="cur_password" class="col-sm-3 col-form-label">Current Password</label>
+                                            <div class="col-sm-9">
+                                                <input type="password" class="form-control form-control-user" name="cur_password" id="cur_password" placeholder="Input current password" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="exampleName" class="col-sm-2 col-form-label">Name</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control form-control-user" name="name" id="exampleName" placeholder="Name" readonly value="<?= $_SESSION['name'] ?>" required>
+                                            <label for="new_password" class="col-sm-3 col-form-label">New Password</label>
+                                            <div class="col-sm-9">
+                                                <input type="password" class="form-control form-control-user" name="new_password" id="new_password" placeholder="Input new password" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="exampleEmail" class="col-sm-2 col-form-label">Email</label>
-                                            <div class="col-sm-10">
-                                                <input type="email" class="form-control form-control-user" name="email" id="exampleEmail" placeholder="Email" readonly value="<?= $_SESSION['email'] ?>" required>
+                                            <label for="confirm_new_password" class="col-sm-3 col-form-label">Confirm New Password</label>
+                                            <div class="col-sm-9">
+                                                <input type="password" class="form-control form-control-user" name="confirm_new_password" id="confirm_new_password" placeholder="Input new password confirmation" required>
                                             </div>
                                         </div>
-                                        <button type="submit" id="submit" class="btn btn-primary btn-user btn-block" disabled>
-                                            Update Profile
+                                        <button type="submit" id="submit" class="btn btn-primary btn-user btn-block">
+                                            Update Password
                                         </button>
                                     </form>
                                 </div>
@@ -167,13 +186,3 @@ function cek_nama($username, $link)
 </body>
 
 </html>
-
-<script>
-    function enableInput() {
-        var inputs = document.getElementsByClassName('form-control-user');
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].readOnly = false;
-        }
-        document.getElementById('submit').disabled = false;
-    }
-</script>
