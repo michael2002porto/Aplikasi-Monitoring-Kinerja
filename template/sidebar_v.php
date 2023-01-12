@@ -104,7 +104,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Absensi:</h6> -->
                 <a class="collapse-item <?= strtolower($active_sidebar) == 'tambah_absensi' ? 'active' : '' ?>" href="tambah_absensi.php">Tambah Absensi</a>
-                <a class="collapse-item <?= strtolower($active_sidebar) == 'daftar_absensi' ? 'active' : '' ?>" href="daftar_absensi.php">Daftar Absensi</a>
+                <a class="collapse-item <?= strtolower($active_sidebar) == 'daftar_absensi' ? 'active' : '' ?>" href="absensi.php">Daftar Absensi</a>
             </div>
         </div>
     </li>

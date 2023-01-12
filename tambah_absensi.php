@@ -33,9 +33,9 @@
         // Validate id pegawai
         $input_pegawai = trim($_POST["nama_pegawai"]);
         if (empty($input_pegawai)) {
-            $pegawai_err = "Please enter the pegawai";
+            $namaPegawai_err = "Please enter the pegawai";
         } elseif (!ctype_digit($input_pegawai)) {
-            $pegawai_err = "Please enter a positive integer value";
+            $namaPegawai_err = "Please enter a positive integer value";
         } else {
             $pegawai = $input_pegawai;
         }
@@ -50,45 +50,45 @@
             $status = $input_status;
         }
 
-        if (!empty($status)) {
+        if (!empty($status) && empty($namaPegawai_err)) {
             if ($status == "Masuk") {
-                if (empty($namaPegawai_err) && empty($status_err)) {
-                    $sql = "INSERT INTO absensi (id_karyawan, status, absen_masuk) VALUES (?, ?, ?)" ;
-                    if ($stmt = mysqli_prepare($link, $sql)) {
-                        mysqli_stmt_bind_param($stmt, "iss", $paramIdPegawai, $paramStatus, $paramAbsenMasuk);
-
-                        $paramIdPegawai = $pegawai;
-                        $paramStatus = $status;
-                        $paramAbsenMasuk = $waktu;
-
-                        if (mysqli_stmt_execute($stmt)) { 
-                            header("location: absensi.php");
-                            exit();
-                        } else {
-                            echo "Something went wrong. Please try again later.";
+                $sqlMasuk = "SELECT * FROM absensi WHERE id_karyawan = $pegawai AND absen_pulang IS NULL";
+                if ($result = mysqli_query($link, $sqlMasuk)) {
+                    if (mysqli_num_rows($result) == 0) {
+                        $sql = "INSERT INTO absensi (id_karyawan, absen_masuk) VALUES (?, ?)" ;
+                        if ($stmt = mysqli_prepare($link, $sql)) {
+                            mysqli_stmt_bind_param($stmt, "is", $paramIdPegawai, $paramAbsenMasuk);
+    
+                            $paramIdPegawai = $pegawai;
+                            $paramAbsenMasuk = $waktu;
+    
+                            if (mysqli_stmt_execute($stmt)) { 
+                                header("location: absensi.php");
+                                exit();
+                            } else {
+                                echo "Something went wrong. Please try again later.";
+                            }
                         }
+                        // Close statement
+                        mysqli_stmt_close($stmt);
                     }
-                    // Close statement
-                    mysqli_stmt_close($stmt);
                 }
-            } else if ($status == "Keluar") {
-                if (empty($namaPegawai_err) && empty($status_err)) {
-                    $sql = "UPDATE absensi SET absen_pulang = ? WHERE id_karyawan = ? AND absen_pulang IS NULL";
-                    if ($stmt = mysqli_prepare($link, $sql)) {
-                        mysqli_stmt_bind_param($stmt, "si", $paramAbsenPulang, $paramIdPegawai);
+            } else if ($status == "Keluar" && empty($namaPegawai_err)) {
+                $sql = "UPDATE absensi SET absen_pulang = ? WHERE id_karyawan = ? AND absen_pulang IS NULL";
+                if ($stmt = mysqli_prepare($link, $sql)) {
+                    mysqli_stmt_bind_param($stmt, "si", $paramAbsenPulang, $paramIdPegawai);
 
-                        $paramAbsenPulang = $waktu;
-                        $paramIdPegawai = $pegawai;
+                    $paramAbsenPulang = $waktu;
+                    $paramIdPegawai = $pegawai;
 
-                        if (mysqli_stmt_execute($stmt)) {
-                            header('location: absensi.php');
-                            exit();
-                        } else {
-                            echo "Something went wrong. Please try again later.";
-                        }
+                    if (mysqli_stmt_execute($stmt)) {
+                        header('location: absensi.php');
+                        exit();
+                    } else {
+                        echo "Something went wrong. Please try again later.";
                     }
-                    mysqli_stmt_close($stmt);
                 }
+                mysqli_stmt_close($stmt);
             }
         }
     // Close connection
