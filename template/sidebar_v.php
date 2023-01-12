@@ -83,9 +83,9 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Karyawan:</h6> -->
                 <a class="collapse-item <?= strtolower($active_sidebar) == 'tambah_karyawan' ? 'active' : '' ?>"
-                    href="tambah_karyawan.html">Tambah Karyawan</a>
+                    href="create_pegawai.php">Tambah Karyawan</a>
                 <a class="collapse-item <?= strtolower($active_sidebar) == 'daftar_karyawan' ? 'active' : '' ?>"
-                    href="daftar_karyawan.html">Daftar Karyawan</a>
+                    href="daftar_karyawan.php">Daftar Karyawan</a>
             </div>
         </div>
     </li>

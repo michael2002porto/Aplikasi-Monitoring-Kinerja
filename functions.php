@@ -1,5 +1,5 @@
 <?php
-
+require("config.php");
 function upload()
 {
   $namaFile = $_FILES["image"]["name"];
@@ -47,4 +47,62 @@ function upload()
 function alert($msg)
 {
   echo "<script type='text/javascript'>alert('$msg');</script>";
+}
+
+function addData($data)
+{
+  global $link;
+  //ambil data dari setiap elemen dalam form
+  $nama = htmlspecialchars($data["nama"]);
+  $nip = htmlspecialchars($data["nip"]);
+  $jabatan = htmlspecialchars($data["jabatan"]);
+  $alamat = htmlspecialchars($data["alamat"]);
+  $bidang = htmlspecialchars($data["bidang"]);
+
+  $foto = upload();
+
+
+  // querry insert data
+  $query = "INSERT INTO pegawai 
+              VALUES('','$nip','$nama','$jabatan','$alamat','$bidang','$foto')";
+  mysqli_query($link, $query);
+
+
+  // return mysqli_affected_rows($link);
+}
+// function getIdJabatan($jabatan)
+// {
+//   global $link;
+//   print($link);
+//   die;
+//   $query = "SELECT idJabatan FROM jabatan WHERE nama_jabatan = $jabatan";
+
+//   $sql = mysqli_query($link, $query);
+//   $hasil = [];
+//   print($sql);
+//   while ($result = mysqli_fetch_assoc($sql)) {
+//     $hasil[] = $result;
+//   }
+
+//   return $hasil['idJabatan'];
+// }
+
+// function getIdBidang($bidang)
+// {
+//   global $link;
+//   $query = "SELECT idBidang FROM bidang WHERE nama_bidang = $bidang";
+
+//   $sql = mysqli_query($link, $query);
+//   $hasil = [];
+//   while ($result = mysqli_fetch_assoc($sql)) {
+//     $hasil[] = $result;
+//   }
+
+//   return $hasil['idBidang'];
+// }
+function hapus($id)
+{
+  global $link;
+  mysqli_query($link, "DELETE FROM pegawai where idPegawai=$id");
+  return mysqli_affected_rows($link);
 }
