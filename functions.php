@@ -106,3 +106,43 @@ function hapus($id)
   mysqli_query($link, "DELETE FROM pegawai where idPegawai=$id");
   return mysqli_affected_rows($link);
 }
+function pagination($page, $limit)
+{
+  $sql = "SELECT * FROM pegawai LIMIT $page, $limit";
+  /*
+  Pada query diatas terdapat properti LIMIT 
+  yang berguna untuk membatasi pengambilan data 
+  dari pernyataan SELECT
+  */
+  return query($sql);
+  // Lalu selanjutnya mengirimkan query tersebut ke dalam 
+  // fungsi getDataFromDB yang berguna untuk mengambil data dari database
+}
+function search($keyword)
+{
+  $sql = "SELECT * FROM pegawai 
+  WHERE idPegawai LIKE '%$keyword%'
+  OR nip LIKE '%$keyword%'
+  OR nama_peg LIKE '%$keyword%'";
+
+  /*
+  Pada query diatas terdapat properti LIKE 
+  yang berguna untuk mengecek apakah ada data yang sesuai dengan keyword
+  dari pernyataan SELECT
+  */
+
+  return query($sql);
+  // Lalu selanjutnya mengirimkan query tersebut ke dalam 
+  // fungsi getDataFromDB yang berguna untuk mengambil data dari database
+}
+function query($query)
+{
+  global $link;
+  $result = mysqli_query($link, $query);
+  $rows = [];
+
+  while ($row = mysqli_fetch_assoc($result)) {
+    $rows[] = $row;
+  }
+  return $rows;
+}
