@@ -90,7 +90,7 @@
                         $jabatan = $row["nama_jabatan"];
                     } else {
                         // URL doesn't contain valid id parameter. Redirect to error page
-                        header("location: error.php");
+                        header("location: 404.php");
                         exit();
                     }
                 } else {
@@ -105,7 +105,7 @@
             mysqli_close($link);
         } else {
             // URL doesn't contain id parameter. Redirect to error page
-            header("location: error.php");
+            header("location: 404.php");
             exit();
         }
     }
