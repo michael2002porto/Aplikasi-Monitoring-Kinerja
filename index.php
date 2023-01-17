@@ -28,8 +28,12 @@ $jumlah_pekerjaan = mysqli_fetch_assoc(mysqli_query($link, $query))['jumlah'];
 $query = "SELECT COUNT(*) AS jumlah FROM pekerjaan WHERE LOWER(status_pekerjaan) = 'selesai'";
 $jumlah_pekerjaan_selesai = mysqli_fetch_assoc(mysqli_query($link, $query))['jumlah'];
 
-$persentase_pekerjaan_selesai = ($jumlah_pekerjaan_selesai / $jumlah_pekerjaan) * 100;
-$persentase_pekerjaan_selesai = round($persentase_pekerjaan_selesai);
+if (!empty($jumlah_pekerjaan)) {
+    $persentase_pekerjaan_selesai = ($jumlah_pekerjaan_selesai / $jumlah_pekerjaan) * 100;
+    $persentase_pekerjaan_selesai = round($persentase_pekerjaan_selesai);
+} else {
+    $persentase_pekerjaan_selesai = 0;
+}
 
 // Bidang Overview
 $sql = "SELECT * FROM bidang";
