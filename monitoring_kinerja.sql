@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2023 at 04:19 AM
+-- Generation Time: Jan 17, 2023 at 05:28 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -34,18 +34,6 @@ CREATE TABLE `absensi` (
   `absen_pulang` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `absensi`
---
-
-INSERT INTO `absensi` (`id_absensi`, `id_karyawan`, `absen_masuk`, `absen_pulang`) VALUES
-(6, 1, '2023-01-12 16:48:53', '2023-01-12 16:49:11'),
-(7, 1, '2023-01-12 16:49:16', '2023-01-14 21:18:14'),
-(8, 1, '2023-01-14 21:18:38', NULL),
-(10, 3, '2023-01-12 16:48:53', '2023-01-17 16:49:11'),
-(11, 3, '2023-01-12 16:49:16', '2023-01-14 21:18:14'),
-(12, 3, '2023-01-14 21:18:38', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -63,9 +51,7 @@ CREATE TABLE `bidang` (
 
 INSERT INTO `bidang` (`idBidang`, `nama_bidang`) VALUES
 (1, 'Bidang Fungsional'),
-(2, 'Bidang Statistik dan Persandian'),
-(3, 'Bidang Informatics'),
-(4, 'Bidang Informasi dan Komunikasi Public');
+(3, 'Bidang Informatics');
 
 -- --------------------------------------------------------
 
@@ -84,7 +70,6 @@ CREATE TABLE `jabatan` (
 
 INSERT INTO `jabatan` (`idJabatan`, `nama_jabatan`) VALUES
 (1, 'Sekretaris2'),
-(2, 'Kabid'),
 (4, 'Staff'),
 (5, 'Kadis'),
 (6, 'Kasi');
@@ -99,9 +84,9 @@ CREATE TABLE `pegawai` (
   `idPegawai` int(11) NOT NULL,
   `nip` varchar(255) NOT NULL,
   `nama_peg` varchar(255) NOT NULL,
-  `id_jabatan` int(11) NOT NULL,
+  `id_jabatan` int(11) DEFAULT NULL,
   `alamat` varchar(255) NOT NULL,
-  `id_bidang` int(11) NOT NULL,
+  `id_bidang` int(11) DEFAULT NULL,
   `photo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -110,12 +95,10 @@ CREATE TABLE `pegawai` (
 --
 
 INSERT INTO `pegawai` (`idPegawai`, `nip`, `nama_peg`, `id_jabatan`, `alamat`, `id_bidang`, `photo`) VALUES
-(1, '   2107411000   ', '   karyawan1   ', 2, '  tes  ', 1, '63c61344f1acd.png'),
-(3, ' 2107411000 ', ' karyawan2 ', 2, '  ', 1, '63c6135a14ca2.png'),
-(21, '  2107411089', '  frenkie de jagung', 2, '  jakarta  ', 2, '63c60bfe648d7.jpg'),
+(21, '  2107411089', '  frenkie de jagung', NULL, '  jakarta  ', NULL, '63c60bfe648d7.jpg'),
 (24, '  2107411003  ', '  Lewandowski ', 4, '  malang  ', 3, '63c5df43024d3.jpg'),
 (25, ' 2107411045 ', ' araujo messi', 5, ' jakarta ', 3, '63c60a61a764d.jpg'),
-(26, '2107411098', 'ter stegen', 5, 'jogja', 2, '63c5df7f3862a.jpg');
+(26, '2107411098', 'ter stegen', 5, 'jogja', NULL, '63c5df7f3862a.jpg');
 
 -- --------------------------------------------------------
 
@@ -131,15 +114,6 @@ CREATE TABLE `pekerjaan` (
   `waktu_selesai` datetime NOT NULL,
   `status_pekerjaan` enum('Selesai','Pending') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `pekerjaan`
---
-
-INSERT INTO `pekerjaan` (`idPekerjaan`, `uraian_pekerjaan`, `id_pegawai`, `waktu_mulai`, `waktu_selesai`, `status_pekerjaan`) VALUES
-(1, 'Membuat laporan harian', 1, '2022-12-29 10:32:24', '2022-12-30 10:32:24', 'Selesai'),
-(2, 'Membuat desain', 1, '2022-12-30 10:32:24', '2022-12-31 10:32:24', 'Pending'),
-(5, 'Membuat laporan bulanan', 1, '2022-12-29 10:32:24', '2022-12-30 10:32:24', 'Selesai');
 
 -- --------------------------------------------------------
 
@@ -163,7 +137,8 @@ INSERT INTO `users` (`id`, `name`, `username`, `email`, `password`) VALUES
 (4, 'Michael Natanael', 'natanaelmichael', 'michael.natanael.tik21@mhsw.pnj.ac.id', '$2y$10$r/jCxr7EcU.P7.pVjh.FjurVOH/0qIkhy.RBdV8qnrosqwAessOd2'),
 (5, 'Angel', 'angel', 'angel@gmail.com', '$2y$10$tvZlYMmywrUdqxEMtan7dezKTqv0pfTayBSGgjm.QBW8lUtX24qyG'),
 (6, 'Lukas', 'lukas', 'lukas@gmail.com', '$2y$10$wsbvnOEMGbZ7QJx1rv9WleLwr2PdX1boJiJnhtWnecQTCQTj8e2r6'),
-(7, 'Jack', 'jack', 'jack@gmail.com', '$2y$10$Xt7UyeuE1e4zUP9VhOfd6ewsyPL5sKbQMPjXtzh/KitVal8kzFNVa');
+(7, 'Jack', 'jack', 'jack@gmail.com', '$2y$10$Xt7UyeuE1e4zUP9VhOfd6ewsyPL5sKbQMPjXtzh/KitVal8kzFNVa'),
+(8, 'michael natanael', 'michael', 'michael@gmail.com', '$2y$10$UcTsc1VaJ7mSSPU/c9DLAew3MQrAaALdIEBXt6/5rCbn8hal1GuNa');
 
 --
 -- Indexes for dumped tables
@@ -224,7 +199,7 @@ ALTER TABLE `absensi`
 -- AUTO_INCREMENT for table `bidang`
 --
 ALTER TABLE `bidang`
-  MODIFY `idBidang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idBidang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `jabatan`
@@ -248,7 +223,7 @@ ALTER TABLE `pekerjaan`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -258,14 +233,14 @@ ALTER TABLE `users`
 -- Constraints for table `absensi`
 --
 ALTER TABLE `absensi`
-  ADD CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `pegawai` (`idPegawai`);
+  ADD CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `pegawai` (`idPegawai`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  ADD CONSTRAINT `bidang_constraint` FOREIGN KEY (`id_bidang`) REFERENCES `bidang` (`idBidang`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `jabatan_constraint` FOREIGN KEY (`id_jabatan`) REFERENCES `jabatan` (`idJabatan`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `pegawai_FK` FOREIGN KEY (`id_bidang`) REFERENCES `bidang` (`idBidang`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pegawai_FK_1` FOREIGN KEY (`id_jabatan`) REFERENCES `jabatan` (`idJabatan`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `pekerjaan`

@@ -1,6 +1,6 @@
 <?php
-//menyertakan file program config.php pada register
-require('config.php');
+//menyertakan file program functions.php pada register
+require('functions.php');
 //inisialisasi session
 session_start();
 $error = '';
@@ -37,7 +37,10 @@ if (isset($_POST['submit'])) {
                     $result = mysqli_query($link, $query); //jika insert data berhasil maka akan diredirect ke halaman login.php serta menyimpan data username ke session
                     if ($result) {
                         // $_SESSION['username'] = $username;
-                        header('Location: login.php');
+                        alert('Register User Berhasil !!');
+                        echo '<script type="text/javascript">';
+                        echo 'window.location.href = "login.php";';
+                        echo '</script>';
                         //jika gagal maka akan menampilkan pesan error
                     } else {
                         $error = 'Register User Gagal !!';
