@@ -157,17 +157,19 @@ function update($data)
   $alamat = htmlspecialchars($data["alamat"]);
   $bidang = htmlspecialchars($data["id_bidang"]);
   $name = $nama;
-  $foto = $data['currentPhoto'];
-  if ($_FILES['foto']['error'] === 0) {
-    $foto = upload();
+  $img = $data['currentPhoto'];
+  if ($_FILES['image']['error'] === 0) {
+    $img = upload();
   }
-
+  // var_dump($data);
+  // die;
   $query = "UPDATE  pegawai SET
                     nip = '$number',
                     nama_peg = '$nama',
-                    id_jabatan ='$jabatan',
+                    id_jabatan = $jabatan,
                     alamat ='$alamat',
-                    id_bidang ='$bidang'
+                    id_bidang = $bidang,
+                    photo = '$img'
                     WHERE idPegawai = $id ";
   mysqli_query($link, $query);
   return mysqli_affected_rows($link);

@@ -5,6 +5,11 @@ $id = $_GET['idPegawai'];
 $data = query("SELECT * FROM pegawai WHERE idPegawai = $id")[0];
 $jabatan = mysqli_query($link, "select * FROM jabatan");
 $bidang = mysqli_query($link, "select * FROM bidang");
+if (isset($_POST['submit'])){
+    if (update($_POST)>0){
+        header('Location:karyawan.php');
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -71,7 +76,7 @@ $bidang = mysqli_query($link, "select * FROM bidang");
                                                 <li class="input-group mb-2 ">
                                                     <label for="nama" class="input-group-text  "> Nama Karyawan
                                                     </label>
-                                                    <input type="text" name="nama" id="nama" required
+                                                    <input type="text" name="nama_peg" id="nama" required
                                                         class="form-control" value=" <?= $data['nama_peg'] ?> ">
                                                 </li>
                                                 <li class="input-group mb-2">
@@ -82,7 +87,7 @@ $bidang = mysqli_query($link, "select * FROM bidang");
                                                 <li class=" input-group mb-2">
                                                     <label for="jabatan" class="input-group-text">Jabatan:</label>
 
-                                                    <select name="jabatan" id="jabatan" required class="form-control">
+                                                    <select name="id_jabatan" id="jabatan" required class="form-control">
                                                         <?php while ($result = mysqli_fetch_assoc($jabatan)): ?>
                                                             <option value="<?php echo $result['idJabatan'] ?>"
                                                                <?php if ($data['id_jabatan'] === $result['idJabatan']) {
@@ -97,7 +102,7 @@ $bidang = mysqli_query($link, "select * FROM bidang");
                                                 </li>
                                                 <li class="input-group mb-2">
                                                     <label for="uts" class="input-group-text">photo</label>
-                                                    <input type="file" name="image" id="uts" required
+                                                    <input type="file" name="image" id="uts" 
                                                         class="form-control">
                                                 </li>
                                                 <li class="input-group mb-2">
@@ -108,7 +113,7 @@ $bidang = mysqli_query($link, "select * FROM bidang");
                                                 <li class=" input-group mb-2">
                                                     <label for="bidang" class="input-group-text">Bidang:</label>
 
-                                                    <select name="bidang" id="bidang" required class="form-control">
+                                                    <select name="id_bidang" id="bidang" required class="form-control">
                                                         <?php while ($result = mysqli_fetch_assoc($bidang)): ?>
                                                             <option value="<?php echo $result['idBidang'] ?>"
                                                             <?php if ($data['id_bidang'] === $result['idBidang']) {
@@ -121,7 +126,8 @@ $bidang = mysqli_query($link, "select * FROM bidang");
 
                                                     </select>
                                                 </li>
-
+                                                <input type="hidden" name="idPegawai" value="<?php echo $data['idPegawai']; ?>"  >
+                                                <input type="hidden" name="currentPhoto" value="<?php echo $data['photo']; ?>"  >
                                                 <input type="submit" name="submit" class="btn btn-primary"
                                                     value="Submit">
                                                 <a href="karyawan.php" class="btn btn-default">Cancel</a>

@@ -2,7 +2,7 @@
 session_start();
 require('functions.php');
 $id = $_GET['idPegawai'];
-$karyawan = query("SELECT pegawai.idPegawai as idPegawai, pegawai.photo as photo, pegawai.nip as nip, pegawai.nama_peg as nama_peg, jabatan.nama_jabatan as jabatan, pegawai.alamat as alamat FROM pegawai JOIN jabatan ON pegawai.id_jabatan = jabatan.idJabatan WHERE pegawai.idPegawai = $id")[0];
+$karyawan = query("SELECT pegawai.idPegawai as idPegawai, pegawai.photo as photo, pegawai.nip as nip, pegawai.nama_peg as nama_peg, jabatan.nama_jabatan as jabatan, bidang.nama_bidang as bidang, pegawai.alamat as alamat FROM pegawai JOIN jabatan ON pegawai.id_jabatan = jabatan.idJabatan JOIN bidang ON pegawai.id_bidang = bidang.idBidang WHERE pegawai.idPegawai = $id")[0];
 
 ?>
 
@@ -109,6 +109,14 @@ $karyawan = query("SELECT pegawai.idPegawai as idPegawai, pegawai.photo as photo
 
                                     </tr>
                                     <tr>
+                                        <td>Bidang</td>
+                                        <td>:</td>
+                                        <td>
+                                            <?= $karyawan['bidang'] ?>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
                                         <td>photo</td>
                                         <td>:</td>
                                         <td>
@@ -121,7 +129,7 @@ $karyawan = query("SELECT pegawai.idPegawai as idPegawai, pegawai.photo as photo
 
                                 </table>
                             </div>
-                            <button a href="karyawan.php">back</button>
+                            <a href="karyawan.php">back</a>
 
 
                         </div>
