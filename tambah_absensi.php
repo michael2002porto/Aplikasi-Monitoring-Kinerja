@@ -31,24 +31,30 @@
         $waktu = date('Y-m-d H:i:s');
 
         // Validate id pegawai
-        $input_pegawai = trim($_POST["nama_pegawai"]);
-        if (empty($input_pegawai)) {
-            $namaPegawai_err = "Please enter the pegawai";
-        } elseif (!ctype_digit($input_pegawai)) {
-            $namaPegawai_err = "Please enter a positive integer value";
+        if(isset($_POST["nama_pegawai"])){
+            $input_pegawai = trim($_POST["nama_pegawai"]);
+            if (!ctype_digit($input_pegawai)) {
+                $namaPegawai_err = "Please enter a positive integer value";
+            } else {
+                $pegawai = $input_pegawai;
+            }
         } else {
-            $pegawai = $input_pegawai;
+            $namaPegawai_err = "Please enter the pegawai";  
         }
+        
 
         // Validate satuan
-        $input_status = trim($_POST["status_absen"]);
-        if (empty($input_status)) {
-            $status_err = "Please enter a name";
-        } else if (!($input_status != "Masuk" || $input_status != "Keluar")) {
+        if(isset($_POST["status_absen"])){
+            $input_status = trim($_POST["status_absen"]);
+            if (!($input_status != "Masuk" || $input_status != "Keluar")) {
             $status_err = "Status absensi salah";
-        } else {
+            } else {
             $status = $input_status;
+            }
+        } else {
+            $status_err = "Please enter the status";
         }
+        
 
         if (!empty($status) && empty($namaPegawai_err)) {
             if ($status == "Masuk") {
