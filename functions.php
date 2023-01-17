@@ -120,11 +120,12 @@ function pagination($page, $limit)
 }
 function search($keyword)
 {
-  $sql = "SELECT * FROM pegawai 
-  WHERE idPegawai LIKE '%$keyword%'
-  OR nip LIKE '%$keyword%'
-  OR nama_peg LIKE '%$keyword%'";
+  // $sql = "SELECT * FROM pegawai 
+  // WHERE idPegawai LIKE '%$keyword%'
+  // OR nip LIKE '%$keyword%'
+  // OR nama_peg LIKE '%$keyword%'";
 
+  $sql = "SELECT pegawai.idPegawai as idPegawai, pegawai.photo as photo, pegawai.nip as nip, pegawai.nama_peg as nama_peg, jabatan.nama_jabatan as jabatan FROM pegawai JOIN jabatan ON pegawai.id_jabatan = jabatan.idJabatan WHERE nama_peg LIKE '%$keyword%' OR idPegawai LIKE '%$keyword%' OR nip LIKE '%$keyword%' ";
   /*
   Pada query diatas terdapat properti LIKE 
   yang berguna untuk mengecek apakah ada data yang sesuai dengan keyword
@@ -145,4 +146,29 @@ function query($query)
     $rows[] = $row;
   }
   return $rows;
+}
+function update($data)
+{
+  global $link;
+  $id = $data["idPegawai"];
+  $nama = htmlspecialchars($data["nama_peg"]);
+  $number = htmlspecialchars($data["nip"]);
+  $jabatan = htmlspecialchars($data["id_jabatan"]);
+  $alamat = htmlspecialchars($data["alamat"]);
+  $bidang = htmlspecialchars($data["id_bidang"]);
+  $name = $nama;
+  $foto = $data['currentPhoto'];
+  if ($_FILES['foto']['error'] === 0) {
+    $foto = upload();
+  }
+
+  $query = "UPDATE  pegawai SET
+                    nip = '$number',
+                    nama_peg = '$nama',
+                    id_jabatan ='$jabatan',
+                    alamat ='$alamat',
+                    id_bidang ='$bidang'
+                    WHERE idPegawai = $id ";
+  mysqli_query($link, $query);
+  return mysqli_affected_rows($link);
 }

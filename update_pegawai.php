@@ -1,11 +1,11 @@
 <?php
 session_start();
 require('functions.php');
+$id = $_GET['idPegawai'];
+$data = query("SELECT * FROM pegawai WHERE idPegawai = $id")[0];
 $jabatan = mysqli_query($link, "select * FROM jabatan");
 $bidang = mysqli_query($link, "select * FROM bidang");
-if (isset($_POST['submit'])) {
-    addData($_POST);
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Tambah Karyawan</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Edit Karyawan</h1>
                     </div>
 
                     <div class="wrapper">
@@ -72,19 +72,22 @@ if (isset($_POST['submit'])) {
                                                     <label for="nama" class="input-group-text  "> Nama Karyawan
                                                     </label>
                                                     <input type="text" name="nama" id="nama" required
-                                                        class="form-control">
+                                                        class="form-control" value=" <?= $data['nama_peg'] ?> ">
                                                 </li>
                                                 <li class="input-group mb-2">
                                                     <label for="nip" class="input-group-text"> NIP</label>
-                                                    <input type="number" name="nip" id="nip" required
-                                                        class="form-control">
+                                                    <input type="text" name="nip" id="nip" required class="form-control"
+                                                        value=" <?= $data['nip'] ?> ">
                                                 </li>
                                                 <li class=" input-group mb-2">
                                                     <label for="jabatan" class="input-group-text">Jabatan:</label>
 
                                                     <select name="jabatan" id="jabatan" required class="form-control">
                                                         <?php while ($result = mysqli_fetch_assoc($jabatan)): ?>
-                                                            <option value="<?php echo $result['idJabatan'] ?>">
+                                                            <option value="<?php echo $result['idJabatan'] ?>"
+                                                               <?php if ($data['id_jabatan'] === $result['idJabatan']) {
+                                                                    echo "selected";
+                                                                } ?>>
                                                                 <?php echo $result['nama_jabatan'] ?>
                                                             </option>
                                                         <?php endwhile; ?>
@@ -100,14 +103,17 @@ if (isset($_POST['submit'])) {
                                                 <li class="input-group mb-2">
                                                     <label for="uts" class="input-group-text">Alamat</label>
                                                     <input type="text-area" name="alamat" id="uts" required
-                                                        class="form-control">
+                                                        class="form-control" value=" <?= $data['alamat'] ?> ">
                                                 </li>
                                                 <li class=" input-group mb-2">
                                                     <label for="bidang" class="input-group-text">Bidang:</label>
 
                                                     <select name="bidang" id="bidang" required class="form-control">
                                                         <?php while ($result = mysqli_fetch_assoc($bidang)): ?>
-                                                            <option value="<?php echo $result['idBidang'] ?>">
+                                                            <option value="<?php echo $result['idBidang'] ?>"
+                                                            <?php if ($data['id_bidang'] === $result['idBidang']) {
+                                                                    echo "selected";
+                                                                } ?>>
                                                                 <?php echo $result['nama_bidang'] ?>
                                                             </option>
                                                         <?php endwhile; ?>
