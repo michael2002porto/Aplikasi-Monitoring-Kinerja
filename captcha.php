@@ -1,7 +1,4 @@
 <?php
-// Nama : Michael Natanael
-// NIM  : 2107411002
-
 session_start();
 function acakCaptcha()
 {

@@ -175,7 +175,7 @@ function cek_nama($username, $link)
         <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
             <!-- Copyright -->
             <div class="text-white mb-3 mb-md-0">
-                Copyright © 2023 By Michael Natanael. All rights reserved.
+                Copyright &copy; Aplikasi Monitoring Kinerja 2023
             </div>
             <!-- Copyright -->
         </div>
