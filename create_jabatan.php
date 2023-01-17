@@ -70,7 +70,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Monitoring Kinerja - Bidang - Create Jabatan</title>
+        <title>Monitoring Kinerja - Jabatan - Create Jabatan</title>
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -88,7 +88,7 @@
         <div id="wrapper">
 
             <?php
-                $active_sidebar = 'dashboard';
+                $active_sidebar = 'tambah_jabatan';
                 include "template/sidebar_v.php";
             ?>
 
@@ -99,7 +99,7 @@
                 <div id="content">
 
                     <?php
-                        include "template/topbar_v2.php";
+                        include "template/topbar_v.php";
                     ?>
 
                     <!-- Begin Page Content -->

@@ -23,7 +23,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Monitoring Kinerja - Pekerjaan - Daftar Bidang</title>
+        <title>Monitoring Kinerja - Absensi - Daftar Absensi</title>
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -41,7 +41,7 @@
         <div id="wrapper">
 
             <?php
-                $active_sidebar = 'daftar_pekerjaan';
+                $active_sidebar = 'daftar_absensi';
                 include "template/sidebar_v.php";
             ?>
 
@@ -60,7 +60,7 @@
 
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Daftar Pekerjaan</h1>
+                            <h1 class="h3 mb-0 text-gray-800">Daftar Absensi</h1>
                         </div>
 
                         <div class="wrapper">
@@ -88,14 +88,14 @@
 
                                             if (isset($_GET['search'])) {
                                                 $search = $_GET['search'];
-                                                $sql = "SELECT k.idPekerjaan, k.uraian_pekerjaan, k.waktu_mulai, k.waktu_selesai, k.status_pekerjaan, p.nama_peg
-                                                        FROM pekerjaan k
-                                                        INNER JOIN pegawai p ON p.idPegawai = k.id_pegawai
-                                                        WHERE uraian_pekerjaan LIKE '%$search%' ORDER BY idPekerjaan ASC LIMIT $posisi, $batas";
+                                                $sql = "SELECT id_absensi, id_karyawan, absen_masuk, absen_pulang, nama_peg
+                                                        FROM absensi
+                                                        INNER JOIN pegawai ON idPegawai = id_karyawan
+                                                        WHERE nama_peg LIKE '%$search%' ORDER BY idPegawai ASC LIMIT $posisi, $batas";
                                             } else {
-                                                $sql = "SELECT k.idPekerjaan, k.uraian_pekerjaan, k.waktu_mulai, k.waktu_selesai, k.status_pekerjaan, p.nama_peg
-                                                        FROM pekerjaan k
-                                                        INNER JOIN pegawai p ON p.idPegawai = k.id_pegawai ORDER BY idPekerjaan ASC LIMIT $posisi, $batas";
+                                                $sql = "SELECT id_absensi, id_karyawan, absen_masuk, absen_pulang, nama_peg
+                                                        FROM absensi
+                                                        INNER JOIN pegawai ON idPegawai = id_karyawan ORDER BY idPegawai ASC LIMIT $posisi, $batas";
                                             }
 
                                             if ($result = mysqli_query($link, $sql)) {
@@ -105,12 +105,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Uraian pekerjaan</th>
-                                                    <th>Pegawai</th>
-                                                    <th>Waktu Mulai</th>
-                                                    <th>Waktu Selesai</th>
-                                                    <th>Status</th>
-                                                    <th>Pengaturan</th>
+                                                    <th>Nama</th>
+                                                    <th>Waktu Masuk</th>
+                                                    <th>Waktu Keluar</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -121,18 +118,15 @@
 
                                                 <tr>
                                                     <td><?= $i ?></td>
-                                                    <td><?= $row['uraian_pekerjaan'] ?></td>
                                                     <td><?= $row['nama_peg'] ?></td>
-                                                    <td><?= date('d-m-Y H:i:s', strtotime($row['waktu_mulai'])); ?></td>
-                                                    <td><?= date('d-m-Y H:i:s', strtotime($row['waktu_selesai'])); ?></td>
-                                                    <td><?= $row['status_pekerjaan'] ?></td>
-                                                    <td>
-                                                        <?php 
-                                                            echo "<a href='update_pekerjaan.php?id=" . $row['idPekerjaan'] ."' title='Update record' data-toggle='tooltip'><span class='fas fa-pen'>
-                                                            </span></a>";
-                                                            echo "<a href='delete_pekerjaan.php?id=" . $row['idPekerjaan'] ."' title='Delete record' data-toggle='tooltip'><span class='fas fa-trash'>
-                                                            </span></a>";
-                                                        ?>
+                                                    <td><?= date('d-m-Y H:i:s', strtotime($row['absen_masuk'])); ?></td>
+                                                    <td><?php
+                                                        if (empty($row['absen_pulang'])) {
+                                                            echo 'NULL';
+                                                        } else {
+                                                            echo date('d-m-Y H:i:s', strtotime($row['absen_pulang']));
+                                                        }
+                                                    ?>
                                                     </td>
                                                 </tr>
                                                 
@@ -148,14 +142,14 @@
                                                 <?php
                                                     if (isset($_GET['search'])) {
                                                         $search = $_GET['search'];
-                                                        $query2 = "SELECT k.idPekerjaan, k.uraian_pekerjaan, k.waktu_mulai, k.waktu_selesai, k.status_pekerjaan, p.nama_peg
-                                                                    FROM pekerjaan k
-                                                                    INNER JOIN pegawai p ON p.idPegawai = k.id_pegawai 
-                                                                    WHERE uraian_pekerjaan LIKE '%$search%' ORDER BY idPekerjaan ASC";
+                                                        $query2 = "SELECT id_absensi, id_karyawan, absen_masuk, absen_pulang, nama_peg
+                                                                    FROM absensi
+                                                                    INNER JOIN pegawai ON idPegawai = id_karyawan
+                                                                    WHERE nama_peg LIKE '%$search%' ORDER BY idPegawai ASC";
                                                     } else {
-                                                        $query2 = "SELECT k.idPekerjaan, k.uraian_pekerjaan, k.waktu_mulai, k.waktu_selesai, k.status_pekerjaan, p.nama_peg
-                                                                    FROM pekerjaan k
-                                                                    INNER JOIN pegawai p ON p.idPegawai = k.id_pegawai ORDER BY uraian_pekerjaan ASC";
+                                                        $query2 = "SELECT id_absensi, id_karyawan, absen_masuk, absen_pulang, nama_peg
+                                                                    FROM absensi
+                                                                    INNER JOIN pegawai ON idPegawai = id_karyawan ORDER BY idPegawai ASC";
                                                     }
 
                                                     $result2 = mysqli_query($link, $query2);
@@ -166,9 +160,9 @@
                                                         if ($i != $halaman) {
                                                             if (isset($_GET['search'])) {
                                                                 $search = $_GET['search'];
-                                                                echo "<li class='page-item'><a class='page-link' href='pekerjaan.php?halaman=$i&search=$search'>$i</a></li>";
+                                                                echo "<li class='page-item'><a class='page-link' href='absensi.php?halaman=$i&search=$search'>$i</a></li>";
                                                             } else {
-                                                                echo "<li class='page-item'><a class='page-link' href='pekerjaan.php?halaman=$i'>$i</a></li>";
+                                                                echo "<li class='page-item'><a class='page-link' href='absensi.php?halaman=$i'>$i</a></li>";
                                                             }
                                                         } else {
                                                             echo "<li class='page-item active'><a class='page-link' href='#'>$i</a></li>";

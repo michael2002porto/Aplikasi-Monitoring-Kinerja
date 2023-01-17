@@ -106,7 +106,7 @@
                 <a class="collapse-item <?= strtolower($active_sidebar) == 'tambah_absensi' ? 'active' : '' ?>"
                     href="tambah_absensi.php">Tambah Absensi</a>
                 <a class="collapse-item <?= strtolower($active_sidebar) == 'daftar_absensi' ? 'active' : '' ?>"
-                    href="daftar_absensi.php">Daftar Absensi</a>
+                    href="absensi.php">Daftar Absensi</a>
             </div>
         </div>
     </li>
