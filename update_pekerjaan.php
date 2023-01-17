@@ -69,7 +69,7 @@
             $sql = "UPDATE pekerjaan SET uraian_pekerjaan=?, id_pegawai=?, waktu_mulai=?, waktu_selesai=?, status_pekerjaan=? WHERE idPekerjaan=?";
             if ($stmt = mysqli_prepare($link, $sql)) {
                 // Bind variables to the prepared statement as parameters
-                mysqli_stmt_bind_param($stmt, "sissi", $param_uraianPekerjaan, $param_namaPegawai, $param_waktuMulai, $param_waktuSelesai, $param_status, $param_idPekerjaan);
+                mysqli_stmt_bind_param($stmt, "sisssi", $param_uraianPekerjaan, $param_namaPegawai, $param_waktuMulai, $param_waktuSelesai, $param_status, $param_idPekerjaan);
 
                 // Set parameters
                 $param_uraianPekerjaan = $uraianPekerjaan;
