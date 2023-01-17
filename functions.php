@@ -106,3 +106,71 @@ function hapus($id)
   mysqli_query($link, "DELETE FROM pegawai where idPegawai=$id");
   return mysqli_affected_rows($link);
 }
+function pagination($page, $limit)
+{
+  $sql = "SELECT * FROM pegawai LIMIT $page, $limit";
+  /*
+  Pada query diatas terdapat properti LIMIT 
+  yang berguna untuk membatasi pengambilan data 
+  dari pernyataan SELECT
+  */
+  return query($sql);
+  // Lalu selanjutnya mengirimkan query tersebut ke dalam 
+  // fungsi getDataFromDB yang berguna untuk mengambil data dari database
+}
+function search($keyword)
+{
+  // $sql = "SELECT * FROM pegawai 
+  // WHERE idPegawai LIKE '%$keyword%'
+  // OR nip LIKE '%$keyword%'
+  // OR nama_peg LIKE '%$keyword%'";
+
+  $sql = "SELECT pegawai.idPegawai as idPegawai, pegawai.photo as photo, pegawai.nip as nip, pegawai.nama_peg as nama_peg, jabatan.nama_jabatan as jabatan FROM pegawai JOIN jabatan ON pegawai.id_jabatan = jabatan.idJabatan WHERE nama_peg LIKE '%$keyword%' OR idPegawai LIKE '%$keyword%' OR nip LIKE '%$keyword%' ";
+  /*
+  Pada query diatas terdapat properti LIKE 
+  yang berguna untuk mengecek apakah ada data yang sesuai dengan keyword
+  dari pernyataan SELECT
+  */
+
+  return query($sql);
+  // Lalu selanjutnya mengirimkan query tersebut ke dalam 
+  // fungsi getDataFromDB yang berguna untuk mengambil data dari database
+}
+function query($query)
+{
+  global $link;
+  $result = mysqli_query($link, $query);
+  $rows = [];
+
+  while ($row = mysqli_fetch_assoc($result)) {
+    $rows[] = $row;
+  }
+  return $rows;
+}
+function update($data)
+{
+  global $link;
+  $id = $data["idPegawai"];
+  $nama = htmlspecialchars($data["nama_peg"]);
+  $number = htmlspecialchars($data["nip"]);
+  $jabatan = htmlspecialchars($data["id_jabatan"]);
+  $alamat = htmlspecialchars($data["alamat"]);
+  $bidang = htmlspecialchars($data["id_bidang"]);
+  $name = $nama;
+  $img = $data['currentPhoto'];
+  if ($_FILES['image']['error'] === 0) {
+    $img = upload();
+  }
+  // var_dump($data);
+  // die;
+  $query = "UPDATE  pegawai SET
+                    nip = '$number',
+                    nama_peg = '$nama',
+                    id_jabatan = $jabatan,
+                    alamat ='$alamat',
+                    id_bidang = $bidang,
+                    photo = '$img'
+                    WHERE idPegawai = $id ";
+  mysqli_query($link, $query);
+  return mysqli_affected_rows($link);
+}

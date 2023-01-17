@@ -47,7 +47,7 @@ if (isset($_GET["id"]) &&  !empty(trim($_GET["id"]))) {
                 $image = $row["foto"];
             } else {
                 // URL doesn't contain valid id parameter. Redirect to error page
-                header("location: error.php");
+                header("location: 404.php");
                 exit();
             }
         } else {
@@ -62,7 +62,7 @@ if (isset($_GET["id"]) &&  !empty(trim($_GET["id"]))) {
     mysqli_close($link);
 } else {
     // URL doesn't contain id parameter. Redirect to error page
-    header("location: error.php");
+    header("location: 404.php");
     exit();
 }
 ?>

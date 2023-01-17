@@ -41,7 +41,7 @@
         <div id="wrapper">
 
             <?php
-                $active_sidebar = 'dashboard';
+                $active_sidebar = 'daftar_pekerjaan';
                 include "template/sidebar_v.php";
             ?>
 
@@ -52,7 +52,7 @@
                 <div id="content">
 
                     <?php
-                        include "template/topbar_v2.php";
+                        include "template/topbar_v.php";
                     ?>
 
                     <!-- Begin Page Content -->

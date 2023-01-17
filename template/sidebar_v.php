@@ -85,7 +85,7 @@
                 <a class="collapse-item <?= strtolower($active_sidebar) == 'tambah_karyawan' ? 'active' : '' ?>"
                     href="create_pegawai.php">Tambah Karyawan</a>
                 <a class="collapse-item <?= strtolower($active_sidebar) == 'daftar_karyawan' ? 'active' : '' ?>"
-                    href="daftar_karyawan.php">Daftar Karyawan</a>
+                    href="karyawan.php">Daftar Karyawan</a>
             </div>
         </div>
     </li>
@@ -103,8 +103,10 @@
             aria-labelledby="headingAbsensi" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Absensi:</h6> -->
-                <a class="collapse-item <?= strtolower($active_sidebar) == 'tambah_absensi' ? 'active' : '' ?>" href="tambah_absensi.php">Tambah Absensi</a>
-                <a class="collapse-item <?= strtolower($active_sidebar) == 'daftar_absensi' ? 'active' : '' ?>" href="absensi.php">Daftar Absensi</a>
+                <a class="collapse-item <?= strtolower($active_sidebar) == 'tambah_absensi' ? 'active' : '' ?>"
+                    href="tambah_absensi.php">Tambah Absensi</a>
+                <a class="collapse-item <?= strtolower($active_sidebar) == 'daftar_absensi' ? 'active' : '' ?>"
+                    href="absensi.php">Daftar Absensi</a>
             </div>
         </div>
     </li>

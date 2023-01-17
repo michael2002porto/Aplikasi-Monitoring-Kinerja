@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 09, 2023 at 11:07 AM
+-- Generation Time: Jan 17, 2023 at 04:19 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -20,6 +20,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `monitoring_kinerja`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `absensi`
+--
+
+CREATE TABLE `absensi` (
+  `id_absensi` int(11) NOT NULL,
+  `id_karyawan` int(11) NOT NULL,
+  `absen_masuk` datetime NOT NULL,
+  `absen_pulang` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `absensi`
+--
+
+INSERT INTO `absensi` (`id_absensi`, `id_karyawan`, `absen_masuk`, `absen_pulang`) VALUES
+(6, 1, '2023-01-12 16:48:53', '2023-01-12 16:49:11'),
+(7, 1, '2023-01-12 16:49:16', '2023-01-14 21:18:14'),
+(8, 1, '2023-01-14 21:18:38', NULL),
+(10, 3, '2023-01-12 16:48:53', '2023-01-17 16:49:11'),
+(11, 3, '2023-01-12 16:49:16', '2023-01-14 21:18:14'),
+(12, 3, '2023-01-14 21:18:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -75,16 +100,22 @@ CREATE TABLE `pegawai` (
   `nip` varchar(255) NOT NULL,
   `nama_peg` varchar(255) NOT NULL,
   `id_jabatan` int(11) NOT NULL,
-  `detail_jabatan` text NOT NULL,
-  `id_bidang` int(11) NOT NULL
+  `alamat` varchar(255) NOT NULL,
+  `id_bidang` int(11) NOT NULL,
+  `photo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `pegawai`
 --
 
-INSERT INTO `pegawai` (`idPegawai`, `nip`, `nama_peg`, `id_jabatan`, `detail_jabatan`, `id_bidang`) VALUES
-(1, '2107411000', 'karyawan1', 2, 'kabid pemetaan', 1);
+INSERT INTO `pegawai` (`idPegawai`, `nip`, `nama_peg`, `id_jabatan`, `alamat`, `id_bidang`, `photo`) VALUES
+(1, '   2107411000   ', '   karyawan1   ', 2, '  tes  ', 1, '63c61344f1acd.png'),
+(3, ' 2107411000 ', ' karyawan2 ', 2, '  ', 1, '63c6135a14ca2.png'),
+(21, '  2107411089', '  frenkie de jagung', 2, '  jakarta  ', 2, '63c60bfe648d7.jpg'),
+(24, '  2107411003  ', '  Lewandowski ', 4, '  malang  ', 3, '63c5df43024d3.jpg'),
+(25, ' 2107411045 ', ' araujo messi', 5, ' jakarta ', 3, '63c60a61a764d.jpg'),
+(26, '2107411098', 'ter stegen', 5, 'jogja', 2, '63c5df7f3862a.jpg');
 
 -- --------------------------------------------------------
 
@@ -107,7 +138,8 @@ CREATE TABLE `pekerjaan` (
 
 INSERT INTO `pekerjaan` (`idPekerjaan`, `uraian_pekerjaan`, `id_pegawai`, `waktu_mulai`, `waktu_selesai`, `status_pekerjaan`) VALUES
 (1, 'Membuat laporan harian', 1, '2022-12-29 10:32:24', '2022-12-30 10:32:24', 'Selesai'),
-(2, 'Membuat desain', 1, '2022-12-30 10:32:24', '2022-12-31 10:32:24', 'Pending');
+(2, 'Membuat desain', 1, '2022-12-30 10:32:24', '2022-12-31 10:32:24', 'Pending'),
+(5, 'Membuat laporan bulanan', 1, '2022-12-29 10:32:24', '2022-12-30 10:32:24', 'Selesai');
 
 -- --------------------------------------------------------
 
@@ -136,6 +168,13 @@ INSERT INTO `users` (`id`, `name`, `username`, `email`, `password`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `absensi`
+--
+ALTER TABLE `absensi`
+  ADD PRIMARY KEY (`id_absensi`),
+  ADD KEY `id_karyawan` (`id_karyawan`);
 
 --
 -- Indexes for table `bidang`
@@ -176,6 +215,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `absensi`
+--
+ALTER TABLE `absensi`
+  MODIFY `id_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `bidang`
 --
 ALTER TABLE `bidang`
@@ -191,13 +236,13 @@ ALTER TABLE `jabatan`
 -- AUTO_INCREMENT for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  MODIFY `idPegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idPegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `pekerjaan`
 --
 ALTER TABLE `pekerjaan`
-  MODIFY `idPekerjaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idPekerjaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -208,6 +253,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `absensi`
+--
+ALTER TABLE `absensi`
+  ADD CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `pegawai` (`idPegawai`);
 
 --
 -- Constraints for table `pegawai`

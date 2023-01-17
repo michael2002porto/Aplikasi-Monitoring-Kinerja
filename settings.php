@@ -1,8 +1,6 @@
 <?php
 //inisialisasi session
 session_start();
-//menyertakan file program config.php pada register
-require('config.php');
 //menyertakan file program functions.php pada register
 require('functions.php');
 //mengecek username pada session

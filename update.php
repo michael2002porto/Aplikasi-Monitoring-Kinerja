@@ -141,7 +141,7 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
                     $image = $row["foto"];
                 } else {
                     // URL doesn't contain valid id parameter. Redirect to error page
-                    header("location: error.php");
+                    header("location: 404.php");
                     exit();
                 }
             } else {
@@ -156,7 +156,7 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
         mysqli_close($link);
     } else {
         // URL doesn't contain id parameter. Redirect to error page
-        header("location: error.php");
+        header("location: 404.php");
         exit();
     }
 }
